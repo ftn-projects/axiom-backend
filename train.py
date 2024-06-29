@@ -45,7 +45,7 @@ def load_episodes(input_dir) -> list[str]:
         filepath = os.path.join(input_dir, filename)
 
         if os.path.isfile(filepath):
-            with open(filepath, 'r') as file:
+            with open(filepath, 'r', encoding="utf-8") as file:
                 episodes.append(filename + '\n\n' + file.read())
 
     return episodes
@@ -56,7 +56,7 @@ def main():
     print('Loading model and tokenizer...')
     model = GPT2LMHeadModel.from_pretrained(CHECKPOINT)
     tokenizer = GPT2Tokenizer.from_pretrained(CHECKPOINT)
-
+    tokenizer.pad_token = tokenizer.eos_token
 
     print('Creating training dataset...')
     training_dataset = ShowDataset(load_episodes(TRAIN_DIR), tokenizer)
