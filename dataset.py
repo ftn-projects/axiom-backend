@@ -43,6 +43,6 @@ def load_episodes(input_dir) -> list[str]:
 
         if os.path.isfile(filepath):
             with open(filepath, 'r', encoding='utf-8') as file:
-                episodes.append(file.read())
+                episodes.append(file.read().strip())
 
     return episodes

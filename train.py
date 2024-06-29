@@ -22,7 +22,7 @@ def get_trainer(model, tokenizer, dataset, epochs, batch_size, output_dir) -> Tr
         save_total_limit=2,
         logging_dir='./logs',
         logging_steps=200,
-        no_cuda=True
+        use_cpu=True  # change accordingly to computer specs
     )
 
     data_collator = DataCollatorForLanguageModeling(
@@ -61,3 +61,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
