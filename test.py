@@ -10,7 +10,7 @@ tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 tokenizer.pad_token = tokenizer.eos_token
 
 
-prompt = 'Once upon a time: '
+prompt = 'This episode begins when'
 
 input_ids = tokenizer.encode(prompt, return_tensors='pt')
 
