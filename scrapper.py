@@ -4,9 +4,9 @@ import re
 
 
 BASE_URL = 'https://regularshow.fandom.com'
-TEST_DIR = 'test/'
-TRAIN_DIR = 'train/'
-TARGET_SUCCESSES=54
+TEST_DIR = 'data/test/'
+TRAIN_DIR = 'data/train/'
+TARGET_SUCCESSES=52
 PROBABILITY=0.2
 
 
@@ -58,18 +58,23 @@ def load_episode(episode_url: str) -> tuple:
 def main():
     contents_page1 = BASE_URL + '/wiki/Category:Transcripts'
     contents_page2 = contents_page1 + '?from=Space+Escape%2FTranscript'
+
+    print('Fetching links...')
     links = get_episode_links(contents_page1) + get_episode_links(contents_page2)
 
+    print('Fetching episodes...')
     max_train = 0
     for link in links:
         title, transcript = load_episode(link)
-        if random.random() <= PROBABILITY and max_train<=TARGET_SUCCESSES:
+        if random.random() <= PROBABILITY and max_train < TARGET_SUCCESSES:
             max_train+=1
             with open(TEST_DIR + title + ".txt", "w", encoding='utf-8') as f:
                 f.write(transcript)
         else:
             with open(TRAIN_DIR + title + ".txt", "w", encoding='utf-8') as f:
-                f.write(transcript) 
+                f.write(transcript)
+
+    print('Done')
 
 
 if __name__ == "__main__":
