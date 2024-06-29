@@ -1,3 +1,4 @@
+import os
 from transformers import GPT2Tokenizer
 from torch.utils.data import Dataset
 
@@ -32,3 +33,16 @@ class ShowDataset(Dataset):
             'attention_mask': attention_mask,
             'labels': input_ids
         }
+
+
+def load_episodes(input_dir) -> list[str]:
+    episodes = []
+
+    for filename in os.listdir(input_dir):
+        filepath = os.path.join(input_dir, filename)
+
+        if os.path.isfile(filepath):
+            with open(filepath, 'r', encoding='utf-8') as file:
+                episodes.append(filename + '\n\n' + file.read())
+
+    return episodes
