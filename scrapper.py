@@ -1,9 +1,13 @@
+import random
 from urllib.request import urlopen
 import re
 
 
 BASE_URL = 'https://regularshow.fandom.com'
-DATA_DIR = 'data/'
+TEST_DIR = 'test/'
+TRAIN_DIR = 'train/'
+TARGET_SUCCESSES=54
+PROBABILITY=0.2
 
 
 def get_page_html(page_url: str):
@@ -56,11 +60,16 @@ def main():
     contents_page2 = contents_page1 + '?from=Space+Escape%2FTranscript'
     links = get_episode_links(contents_page1) + get_episode_links(contents_page2)
 
+    max_train = 0
     for link in links:
         title, transcript = load_episode(link)
-
-        with open(DATA_DIR + title + ".txt", "w", encoding='utf-8') as f:
-            f.write(transcript)
+        if random.random() <= PROBABILITY and max_train<=TARGET_SUCCESSES:
+            max_train+=1
+            with open(TEST_DIR + title + ".txt", "w", encoding='utf-8') as f:
+                f.write(transcript)
+        else:
+            with open(TRAIN_DIR + title + ".txt", "w", encoding='utf-8') as f:
+                f.write(transcript) 
 
 
 if __name__ == "__main__":
