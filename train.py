@@ -8,8 +8,8 @@ TRAIN_DIR = './data/train'
 TEST_DIR = './data/test'
 OUTPUT_DIR = './finetuned-gpt2'
 
-EPOCHS = 4
-BATCH_SIZE = 4
+EPOCHS = 3
+BATCH_SIZE = 2
 
 
 def get_trainer(model, tokenizer, dataset, epochs, batch_size, output_dir) -> Trainer:
@@ -22,7 +22,9 @@ def get_trainer(model, tokenizer, dataset, epochs, batch_size, output_dir) -> Tr
         save_total_limit=2,
         logging_dir='./logs',
         logging_steps=200,
-        use_cpu=True  # change accordingly to computer specs
+        use_cpu=False,  # change accordingly to computer specs
+        gradient_accumulation_steps=8,
+        fp16=True
     )
 
     data_collator = DataCollatorForLanguageModeling(
