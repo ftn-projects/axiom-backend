@@ -8,7 +8,7 @@ TRAIN_DIR = './data/train'
 TEST_DIR = './data/test'
 OUTPUT_DIR = './finetuned-gpt2'
 
-EPOCHS = 3
+EPOCHS = 4
 BATCH_SIZE = 4
 
 
@@ -18,7 +18,7 @@ def get_trainer(model, tokenizer, dataset, epochs, batch_size, output_dir) -> Tr
         overwrite_output_dir=True,
         num_train_epochs=epochs,
         per_device_train_batch_size=batch_size,
-        save_steps=10_000,
+        save_steps=10000,
         save_total_limit=2,
         logging_dir='./logs',
         logging_steps=200,

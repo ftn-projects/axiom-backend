@@ -4,10 +4,10 @@ from torch.utils.data import Dataset
 
 
 class ShowDataset(Dataset):
-    def __init__(self, episodes: list[str], tokenizer: GPT2Tokenizer, max_length=512) -> None:
+    def __init__(self, episodes: list[str], tokenizer: GPT2Tokenizer) -> None:
         self.episodes = episodes
         self.tokenizer = tokenizer
-        self.max_length = max_length
+        self.max_length = 1024
     
 
     def __len__(self) -> int:
@@ -43,6 +43,7 @@ def load_episodes(input_dir) -> list[str]:
 
         if os.path.isfile(filepath):
             with open(filepath, 'r', encoding='utf-8') as file:
-                episodes.append(file.read().strip())
+                content = file.read().strip()
+                if content: episodes.append(content)
 
     return episodes
