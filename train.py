@@ -1,6 +1,7 @@
 import torch
 from dataset import ShowDataset, load_episodes
 from transformers import GPT2LMHeadModel, GPT2Tokenizer, Trainer, TrainingArguments, DataCollatorForLanguageModeling
+from accelerate import Accelerator, find_executable_batch_size
 
 
 CHECKPOINT = 'gpt2'
@@ -39,27 +40,40 @@ def get_trainer(model, tokenizer, dataset, epochs, batch_size, output_dir) -> Tr
     )
 
 
+def training_function(starting_batch_size, epochs, checkpoint, train_dir, output_dir):
+    accelerator = Accelerator()
+
+    @find_executable_batch_size(starting_batch_size=starting_batch_size)
+    def inner_training_function(batch_size):
+        nonlocal accelerator
+        accelerator.free_memory()  # Free all lingering references
+
+        model = GPT2LMHeadModel.from_pretrained(checkpoint)
+        tokenizer = GPT2Tokenizer.from_pretrained(checkpoint)
+        tokenizer.pad_token = tokenizer.eos_token
+
+        training_dataset = ShowDataset(load_episodes(train_dir), tokenizer)
+
+        trainer = get_trainer(model, tokenizer, training_dataset, epochs, batch_size, output_dir)
+        trainer.train()
+        trainer.save_model(output_dir)
+
+        del model
+        del tokenizer
+        torch.cuda.empty_cache()
+
+
+    inner_training_function()
+
+
 def main():
     print(f'GPU available: {torch.cuda.is_available()}')
-    print('Loading model and tokenizer...')
-    model = GPT2LMHeadModel.from_pretrained(CHECKPOINT)
-    tokenizer = GPT2Tokenizer.from_pretrained(CHECKPOINT)
-    tokenizer.pad_token = tokenizer.eos_token
-
-
-    print('Fetching training dataset...')
-    training_dataset = ShowDataset(load_episodes(TRAIN_DIR), tokenizer)
-
 
     print('Training...')
-    trainer = get_trainer(model, tokenizer, training_dataset, EPOCHS, BATCH_SIZE, OUTPUT_DIR)
-    trainer.train()
+    training_function(BATCH_SIZE, EPOCHS, CHECKPOINT, TRAIN_DIR, OUTPUT_DIR)
 
-
-    print('Saving model...')
-    trainer.save_model(OUTPUT_DIR)
+    torch.cuda.empty_cache()
 
 
 if __name__ == '__main__':
     main()
-    
