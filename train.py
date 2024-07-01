@@ -5,7 +5,6 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer, Trainer, TrainingArgume
 
 CHECKPOINT = 'gpt2'
 TRAIN_DIR = './data/train'
-TEST_DIR = './data/test'
 OUTPUT_DIR = './finetuned-gpt2'
 
 EPOCHS = 3

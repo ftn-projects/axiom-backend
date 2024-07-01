@@ -38,6 +38,8 @@ class ShowDataset(Dataset):
 def load_episodes(input_dir) -> list[str]:
     episodes = []
 
+    aa = os.listdir(input_dir)
+
     for filename in os.listdir(input_dir):
         filepath = os.path.join(input_dir, filename)
 

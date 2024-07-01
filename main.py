@@ -1,12 +1,10 @@
+from os import path
+import time
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
 
 MODEL_DIR = './finetuned-gpt2'
-EP_SIZES = {
-    'small': 512,
-    'medium': 1024,
-    'large': 2048
-}
+OUTPUT_DIR = './data/out'
 
 
 def inputModelDir() -> str:
@@ -16,13 +14,10 @@ def inputModelDir() -> str:
 
 def inputEpisodeSize() -> int:
     while True:
-        size = input('Episode size (medium): ').strip().lower()
+        size = input('Episode size (512): ').strip().lower()
         if not size:
-            return EP_SIZES['medium']
+            return 512
         
-        if size in EP_SIZES:
-            return EP_SIZES[size]
-
         try:
             size = int(size)
             if size <= 0:
@@ -30,7 +25,7 @@ def inputEpisodeSize() -> int:
             return size
         except: pass
 
-        print('Size must be a positive number or [small, medium, big].')
+        print('Size must be a positive number.')
 
 
 def inputPrompt() -> str:
@@ -38,6 +33,14 @@ def inputPrompt() -> str:
         prompt = input('Prompt: ').strip()
         if prompt: return prompt
         print('Prompt must be non empty.')
+
+
+def save_episode(model, prompt, generated_text) -> None:
+    timestamp = round(time.time())
+    filepath = f'{OUTPUT_DIR}/{model}_{timestamp}.txt'
+
+    with open(filepath, 'w') as f:
+        f.write(f'Prompt: {prompt}\n\n' + generated_text)
 
 
 def main():
@@ -64,6 +67,7 @@ def main():
 
     print('\n\n\n')
     print(generated_text)
+    save_episode(model_dir.split('\\')[-1], prompt, generated_text)
 
 
 if __name__ == '__main__':
