@@ -49,18 +49,26 @@ def compute_metrics(eval_pred):
     }
 
 
-print(f'GPU available: {torch.cuda.is_available()}')
-print('Loading model and tokenizer...')
-model = GPT2LMHeadModel.from_pretrained(MODEL_DIR)
-tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
-tokenizer.pad_token = tokenizer.eos_token
+def main():
+    print(f'GPU available: {torch.cuda.is_available()}')
+    print('Loading model and tokenizer...')
+    model = GPT2LMHeadModel.from_pretrained(MODEL_DIR)
+    tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+    tokenizer.pad_token = tokenizer.eos_token
 
-print('Creating testing dataset...')
-test_dataset = ShowDataset(load_episodes(TEST_DIR), tokenizer)
 
-print('Evaluating...')
-trainer = get_eval_trainer(model, tokenizer, test_dataset, BATCH_SIZE, OUTPUT_DIR)
-eval_results = trainer.evaluate()
+    print('Fetching testing dataset...')
+    test_dataset = ShowDataset(load_episodes(TEST_DIR), tokenizer)
 
-print('Evaluation results:')
-print(eval_results)
+
+    print('Evaluating...')
+    trainer = get_eval_trainer(model, tokenizer, test_dataset, BATCH_SIZE, OUTPUT_DIR)
+    eval_results = trainer.evaluate()
+
+
+    print('Evaluation results:')
+    print(eval_results)
+
+
+if __name__ == '__main__':
+    main()
