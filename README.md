@@ -29,6 +29,14 @@ Evaluacija modela će biti sprovedena kroz **Rouge** (*Recall Oriented Understud
 
 Implementacija projekta bi bila u Python-u. Web scraping će biti sprovedeno koriščenjem ugrađene Python biblioteke **urllib**. Za kreiranje, tokenizaciju, evaluciju modela i tokenizaciju ulaznog skupa podataka biće korišćena biblioteka **Hugging face**.
 
+## Fine-tuned modeli
+
+Na [Google Drive Folderu]() su dostupni istrenirani modeli sa sledećim kombinacijama parametara:
+- 4 epohe, 4 batch size
+- 3 epohe, 4 batch size
+- 3 epohe, 2 batch size (sa 8 koraka akumulacije gradijenta)
+Tokom evaluacije najbolje rezultate je postigao model `E4_B4_finetuned_gpt2` (treniran u 4 epohe sa 4 batch size), ali je empirijski utvrđeno da ne generiše dovoljno kreativne traskripte. Sledeći model sa najboljim Rouge metrikama je `E3_B4_finetuned_gpt2` koji je ubedljivo bolji od poslednjeg.
+
 ## Literatura
 
 [Python Docs urllib](https://docs.python.org/3/library/urllib.html)
