@@ -31,7 +31,7 @@ Implementacija projekta bi bila u Python-u. Web scraping će biti sprovedeno kor
 
 ## Fine-tuned modeli
 
-Na [Google Drive Folderu]() su dostupni istrenirani modeli sa sledećim kombinacijama parametara:
+Na [Google Drive Folderu](https://drive.google.com/drive/folders/1amZPaZT9bsnRoAx6fG5U2tHTWw7avq63?usp=sharing) su dostupni istrenirani modeli sa sledećim kombinacijama parametara:
 - 4 epohe, 4 batch size
 - 3 epohe, 4 batch size
 - 3 epohe, 2 batch size (sa 8 koraka akumulacije gradijenta)
