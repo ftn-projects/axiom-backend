@@ -3,4 +3,3 @@ transformers
 accelerate
 evaluate
 rouge_score
-ray
